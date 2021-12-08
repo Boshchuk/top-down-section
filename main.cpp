@@ -12,8 +12,7 @@ int main()
     Vector2 mapPos{0.0, 0.0};
     const float mapScale{4.0f};
 
-    Character knight;
-    knight.setScreenPos(windowWidth, windowHeight);
+    Character knight{windowWidth, windowHeight};
 
     SetTargetFPS(60);
     while (!WindowShouldClose())
@@ -26,6 +25,14 @@ int main()
         // draw the map
         DrawTextureEx(map, mapPos, 0.0, mapScale, WHITE);
         knight.tick(GetFrameTime());
+        if (knight.getWorldPos().x < 0.f ||
+            knight.getWorldPos().y < 0.f ||
+            knight.getWorldPos().x + windowWidth  >= map.width * mapScale ||
+            knight.getWorldPos().y + windowHeight >= map.height * mapScale
+        )
+        {
+            knight.undoMovement();
+        }
 
         EndDrawing();
     }
